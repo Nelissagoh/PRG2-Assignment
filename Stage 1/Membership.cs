@@ -10,7 +10,7 @@ namespace Stage_1
     {
         public string Status { get; set; }
         public int Points { get; set; }
-        public Membership() { }
+        public Membership() {}
         public Membership(string s, int p)
         {
             Status = s;
