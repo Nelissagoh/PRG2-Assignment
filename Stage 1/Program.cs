@@ -19,6 +19,20 @@ void DisplayAllGuest()
 List<Guest> guestList = new List<Guest>();
 
 
+void DisplayAllRoom()
+{
+    string[] csv = File.ReadAllLines("Rooms.csv");
+    for (int i = 0; i < csv.Length; i++)
+    {
+        string[] rooms = csv[i].Split(',');
+        Console.WriteLine("{0,-20}{1,-20}{2,-30}{3,-20}", rooms[0], rooms[1], rooms[2], rooms[3]);
+    }
+}
+
+List<Room> roomList = new List<Room>();
+
+
+
 while (true)
 {
     Console.WriteLine("----------------M E N U --------------------");
@@ -41,10 +55,10 @@ while (true)
 
     if(choice == 2)
     {
-
+        DisplayAllRoom();
     }
 
-    if(choice == 3)
+    if (choice == 3)
     {
         Console.WriteLine("Enter your name and passport number( seperate with a comma: ");
         string information= Console.ReadLine();
