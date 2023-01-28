@@ -4,6 +4,8 @@ using Stage_1;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+
+//function to display all guest
 void DisplayAllGuest()
 {
     string[] lines = File.ReadAllLines("Guests.csv");
@@ -15,8 +17,23 @@ void DisplayAllGuest()
     
 }
 
-
+//Creating a guestlist
 List<Guest> guestList = new List<Guest>();
+
+
+
+//functiom to display all name in stay file
+void DisplayStayName()
+{
+    string[] information = File.ReadAllLines("Stays.csv");
+    for (int l = 1; l < information.Length; l++)
+    {
+        string[] name = information[l].Split(',');
+        Console.WriteLine("[" + l + "]" +name[0]);
+    }
+}
+
+
 
 
 void DisplayAllRoom()
@@ -50,6 +67,7 @@ while (true)
 
     if (choice == 1)
     {
+        //call for the function
         DisplayAllGuest();
     }
 
@@ -60,34 +78,47 @@ while (true)
 
     if (choice == 3)
     {
+        //prompt user for name and passport number
         Console.WriteLine("Enter your name: ");
         string name = Console.ReadLine();
         Console.WriteLine("Enter your passport number: ");
         string passnum = Console.ReadLine();
 
+        //create a guest object with the information given
         Guest guest1 = new Guest(name,passnum,null,null);
+
+        //create membership object
         Membership m1 = new Membership("Ordinary", 0);
 
+        //assign membership object to the guest
         guest1.Member=m1;
-       
+
+        //add the guest object to the guest list
         guestList.Add(guest1);
 
+        //append the guests information to the guest.csv file
         using (StreamWriter sw=new StreamWriter("Guests.csv", true))
         {
             sw.WriteLine(guest1.Name+","+ guest1.PassportNum+","+guest1.Member.Status+","+guest1.Member.Points);
         }
 
+        //display a message to indicate registration status
         Console.WriteLine("Registration Successful");
-
-
-        
-
 
     }
 
     if (choice == 4)
     {
+        //Display guest name in stay file
+        DisplayStayName();
 
+        //prompt user to select a guest
+        Console.WriteLine("Enter your choice of name: ");
+        string opt=Console.ReadLine();
+        if(opt == 1)
+        {
+
+        }
     }
 
     if (choice == 5)
