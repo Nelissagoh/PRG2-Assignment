@@ -60,16 +60,27 @@ while (true)
 
     if (choice == 3)
     {
-        Console.WriteLine("Enter your name and passport number( seperate with a comma: ");
-        string information= Console.ReadLine();
-        string[] items = information.Split(',');
-        string name = items[0];
-        string passnum = items[1];
-        static void Main(string[] args)
-        {
-            Guest g1=new Guest();
+        Console.WriteLine("Enter your name: ");
+        string name = Console.ReadLine();
+        Console.WriteLine("Enter your passport number: ");
+        string passnum = Console.ReadLine();
 
+        Guest guest1 = new Guest(name,passnum,null,null);
+        Membership m1 = new Membership("Ordinary", 0);
+
+        guest1.Member=m1;
+       
+        guestList.Add(guest1);
+
+        using (StreamWriter sw=new StreamWriter("Guests.csv", true))
+        {
+            sw.WriteLine(guest1.Name+","+ guest1.PassportNum+","+guest1.Member.Status+","+guest1.Member.Points);
         }
+
+        Console.WriteLine("Registration Successful");
+
+
+        
 
 
     }

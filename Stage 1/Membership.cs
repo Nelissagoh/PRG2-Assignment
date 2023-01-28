@@ -22,7 +22,7 @@ namespace Stage_1
         }
         public bool RedeemPoints(int p)
         {
-            if(Points >= 100 && Points >= p)
+            if(Status=="Silver" && Status=="Gold" && Points >= p)
             {
                 Points -= p;
                 return true;
