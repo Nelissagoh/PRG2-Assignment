@@ -61,7 +61,7 @@ while (true)
     Console.WriteLine("[6] Extends the stay by numbers of day");
     Console.WriteLine("[0] Exit");
     Console.WriteLine("---------------------------------------------");
-    Console.WriteLine("Enter your choice: ");
+    Console.Write("Enter your choice: ");
 
     int choice=Convert.ToInt32(Console.ReadLine());
 
@@ -110,10 +110,10 @@ while (true)
     if (choice == 4)
     {
         //Display guest name in stay file
-        DisplayStayName();
+        DisplayStayName();           //Why not just DisplayAllGuest instead?
 
-        //prompt user to select a guest
-        Console.WriteLine("Enter your choice of name: ");
+        //prompt user to select a guest and retrieved the selected guest
+        Console.Write("Enter guest name to retrieve: ");
         string opt=Console.ReadLine();
         if(opt == 1)
         {
@@ -128,6 +128,9 @@ while (true)
 
     if (choice == 6)
     {
+        //List the guest
+        DisplayAllGuest();
+
 
     }
 }
