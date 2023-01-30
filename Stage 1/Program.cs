@@ -17,8 +17,16 @@ void DisplayAllGuest()
     
 }
 
+//Creating a guestlist
+List<Guest> guestList = new List<Guest>();
+//Creating a staylist
+List<Stay> stayList = new List<Stay>();
+//Creating a roomlist
+List<Room> roomList = new List<Room>();
+
+
 //Adding guest csv info into guestList
-void InitData(List<Guest> guestList, List<Guest> stayList)
+void InitData(List<Guest> guestList)
 {
     string[] Lines = File.ReadAllLines("Guests.csv");
     for (int i = 1; i < Lines.Length; i++)
@@ -27,7 +35,6 @@ void InitData(List<Guest> guestList, List<Guest> stayList)
         Guest g = new Guest(data[0], data[1], null, new Membership(data[2], Convert.ToInt32(data[3])));
         guestList.Add(g);
 
-        /*
         Lines = File.ReadAllLines("Stays.csv");
 
         for (int a = 1; a < Lines.Length; a++)
@@ -36,28 +43,20 @@ void InitData(List<Guest> guestList, List<Guest> stayList)
             var guest = guestList.Find(x => y[0].Equals(x.Name));
             Stay s = new Stay(Convert.ToDateTime(y[3]), Convert.ToDateTime(y[4]));
             g.HotelStay = s;
-        }*/
+            guestList.Add(g);
+        }
 
     }
-
-
-
 
     foreach (Guest guest in guestList)
     {
         Console.WriteLine(guestList);
     }
-
-
+    
 
 }
-
-//Creating a guestlist
-List<Guest> guestList = new List<Guest>();
-
-
 //Adding guest csv info into guestList and stay csv info into stay list
-InitData(guestList, stayList);
+InitData(guestList);
 
 
 //search method
@@ -86,7 +85,7 @@ void DisplayStayName()
     }
 }
 
-List<Stay> stayList = new List<Stay>();
+
 
 
 void DisplayAllRoom()
@@ -99,7 +98,6 @@ void DisplayAllRoom()
     }
 }
 
-List<Room> roomList = new List<Room>();
 
 
 
@@ -315,7 +313,7 @@ while (true)
         string opt = Console.ReadLine();
 
         // check if the guest is checked in
-        if (something)
+        if ()
         {
             //do something
         }
