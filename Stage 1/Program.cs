@@ -3,6 +3,7 @@
 using Stage_1;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 
 //function to display all guest
@@ -25,6 +26,8 @@ List<Stay> stayList = new List<Stay>();
 List<Room> roomList = new List<Room>();
 
 
+
+
 //Adding guest csv info into guestList
 void InitData(List<Guest> guestList)
 {
@@ -33,33 +36,49 @@ void InitData(List<Guest> guestList)
     {
         string[] data = Lines[i].Split(',');
         Guest g = new Guest(data[0], data[1], null, new Membership(data[2], Convert.ToInt32(data[3])));
+        /*guestList.Add(g);*/
+
         guestList.Add(g);
-
-        Lines = File.ReadAllLines("Stays.csv");
-
-        for (int a = 1; a < Lines.Length; a++)
-        {
-            string[] y = Lines[a].Split(',');
-            var guest = guestList.Find(x => y[0].Equals(x.Name));
-            Stay s = new Stay(Convert.ToDateTime(y[3]), Convert.ToDateTime(y[4]));
-            g.HotelStay = s;
-            guestList.Add(g);
-        }
-
     }
+    string[] csvLines = File.ReadAllLines("Stays.csv");
 
-    foreach (Guest guest in guestList)
+    for (int a = 1; a < Lines.Length; a++)
     {
-        Console.WriteLine(guestList);
+        string[] y = csvLines[a].Split(',');
+        Stay s = new Stay(Convert.ToDateTime(y[3]), Convert.ToDateTime(y[4]));
+        g.HotelStay = s;
+
     }
     
 
-}
+
+
+    foreach (Guest guest in guestList)
+    {
+        Console.WriteLine(guest.HotelStay);
+    }
+ 
+    }
+
+
 //Adding guest csv info into guestList and stay csv info into stay list
 InitData(guestList);
 
 
-//search method
+//search method for feature  4
+Guest? Searchguest(List<Guest> guestList, string? n)
+{
+    foreach (Guest i in guestList)
+    {
+        if (i.Name == n)
+        {
+            return i;
+        }
+    }
+    return null;
+}
+
+//search method for feature 5
 Guest? Search(List<Guest> guestList, string? name)
 {
     foreach (Guest g in guestList)
@@ -74,26 +93,23 @@ Guest? Search(List<Guest> guestList, string? name)
 
 
 
-//functiom to display all name in stay file
-void DisplayStayName()
-{
-    string[] information = File.ReadAllLines("Stays.csv");
-    for (int l = 1; l < information.Length; l++)
-    {
-        string[] name = information[l].Split(',');
-        Console.WriteLine("[" + l + "]" +name[0]);
-    }
-}
-
-
-
-
 void DisplayAllRoom()
 {
     string[] csv = File.ReadAllLines("Rooms.csv");
     for (int i = 0; i < csv.Length; i++)
-    {
+    {   
         string[] rooms = csv[i].Split(',');
+        /*
+        if (csv[0] == "Standard")
+        {
+            Room r = new StandardRoom(Convert.ToInt32(csv[1]), csv[2], Convert.ToDouble(csv[3]), true);
+        }
+        else
+        {
+            Room r = new DeluxeRoom(Convert.ToInt32(csv[1]), csv[2], Convert.ToDouble(csv[3]), true);
+        }
+        roomList.Add(r);
+        */
         Console.WriteLine("{0,-20}{1,-20}{2,-30}{3,-20}", rooms[0], rooms[1], rooms[2], rooms[3]);
     }
 }
@@ -114,7 +130,7 @@ while (true)
     Console.WriteLine("---------------------------------------------");
     Console.Write("Enter your choice: ");
 
-    int choice=Convert.ToInt32(Console.ReadLine());
+    int choice = Convert.ToInt32(Console.ReadLine());
 
     if (choice == 1)
     {
@@ -122,7 +138,7 @@ while (true)
         DisplayAllGuest();
     }
 
-    if(choice == 2)
+    if (choice == 2)
     {
         DisplayAllRoom();
     }
@@ -167,62 +183,76 @@ while (true)
 
     if (choice == 4)
     {
-        //Display guest name in stay file
-        DisplayStayName();           
+        //Display guest name
+        DisplayAllGuest();
+        //prompt user to select a guest
+        Console.WriteLine("Enter your choice of name: ");
+        string? n = Console.ReadLine();
+        n = n.ToLower();
+        //Make first letter uppercase
+        n = char.ToUpper(n[0]) + n.Substring(1);
+        Guest? guestcheck = Searchguest(guestList, n);
 
-        //prompt user to select a guest and retrieved the selected guest
-        Console.Write("Enter guest name to retrieve: ");
-        string opt=Console.ReadLine();
-
-        // prompt user to enter check in date
-        Console.Write("Enter check in date:");
-        int checkin = Convert.ToInt32(Console.ReadLine());
-
-        // prompt user to enter check out date
-        Console.Write("Enter check out date:");
-        int checkout = Convert.ToInt32(Console.ReadLine());
-
-        // create stay object with the information given
-
-        //List all available rooms
-        DisplayAllRoom();
-
-        // prompt user to select a room and retrieve the selected room
-        Console.Write("Select a room to stay:");
-        string room = Console.ReadLine();  //To list out all the available rooms
-                                          // Standard Room: require wifi [Y/N] & require breakfast [Y/N]
-                                         //  Deluxe Room: additional bed [Y/N]
-
-        // update the user response to the room object
-
-        // update the availability of the room
-
-        //add the room object to the room list of the stay
-
-        // prompt user whether want to select another room, if yes, repeat the above steps from list 
-        Console.Write("Do you want to select another room: ");
-        string option = Console.ReadLine();
-        if (option == "yes")
+        //exception
+        bool issString = true;
+        foreach (char c in n)
         {
-            //Do something
+            if (char.IsLetter(c))
+            {
+                issString = false;
+                break;
+            }
         }
-        else if (option == "no")
+
+        //ensure only char
+        if (issString)
         {
-            //Do something
+            Console.WriteLine("Enter guest name(Only Character)");
+            Console.WriteLine("Example: Tony");
+            continue;
         }
+        //show error if guest name not found
+
+        else if (guestcheck == null)
+        {
+
+            Console.WriteLine("Guest not found. Please try agian. ");
+            continue;
+        }
+
+        //if guest name is found
         else
         {
-            Console.WriteLine("Invalid Option");
+            foreach (Guest i in guestList)
+            {
+                if (i.Name == n)
+                {
+                    Console.WriteLine("Name: {0,-15} PassportNumber: " +
+                        "{1,-15} Check in: {2,-20} ", i.Name, i.PassportNum, i.HotelStay);
+                }
+            }
+            //Prompt user for check in date
+            Console.WriteLine("Enter Check in date[25/12/2022]: ");
+            string checkin = Console.ReadLine();
+
+            //Prompt user for check in date
+            Console.WriteLine("Enter Check out date[25/12/2022]: ");
+            string checkout = Console.ReadLine();
+
+            //create a guest object with the information given
+            Stay stay1 = new Stay(Convert.ToDateTime(checkin), Convert.ToDateTime(checkout));
+
+            //List all available rooms
+
+
+            //Prompt user to select a room and retrieve the selected room
+            Console.WriteLine("Select a room: ");
+
+
+
         }
-
-        // assign the stay object to the guest
-
-
-        // update check in status of the guest
-
-        // display a message to indicate check in successfully
-        Console.WriteLine("Check in successfully");
     }
+
 
     if (choice == 5)
     {
@@ -266,43 +296,51 @@ while (true)
         }
 
         //if guest name is found
+        
         else
         {
             foreach (Guest g in guestList)
             {
                 if (g.Name == name)
                 {
+                    
                     Console.WriteLine("Name: {0,-15} PassportNumber: " +
-                        "{1,-15}{2,-20}", g.Name, g.PassportNum, g.HotelStay);
-
-                    if (g.HotelStay == null)
+                        "{1,-15}{2,-20}", g.Name, g.PassportNum);
+                    /*
+                    if (s.CheckinDate == null)
                     {
                         Console.WriteLine("Guest not found. Please try agian.");
                         continue;
                     }
 
+
                     else
                     {
+
                         Console.WriteLine("CheckInDate: {0,-15} CheckOutDate: " +
-                        "{1,-15}", g.HotelStay.CheckinDate, g.HotelStay.CheckoutDate);
+                        "{1,-15}", s.CheckinDate, s.CheckoutDate);
 
                         /*
-                        Console.WriteLine("---------------------Details---------------------");
-                        Console.WriteLine("CheckInDate: {0,-15} CheckOutDate: {1,-15} RoomNumber: " +
-                            "{2,-15} BedConfiguration: {3,-15} DailyRate: {4,-15} IsAvail: {5,-15}"
-                            , g.HotelStay.CheckinDate, g.HotelStay.CheckoutDate);
-                        */
-                    }
+                            Console.WriteLine("---------------------Details---------------------");
+                            Console.WriteLine("CheckInDate: {0,-15} CheckOutDate: {1,-15} RoomNumber: " +
+                                "{2,-15} BedConfiguration: {3,-15} DailyRate: {4,-15} IsAvail: {5,-15}"
+                                ,s.CheckinDate,s.CheckoutDate,s.);*/
 
+                    
+                    
 
                 }
-
             }
 
         }
 
     }
 
+
+
+
+
+    /*
     if (choice == 6)
     {
         // List the guests
@@ -330,13 +368,18 @@ while (true)
         // compute and update the check out date of the stay
     }
 
-
+    */
 
     else
     {
         Console.WriteLine("Invalid Options");
     }
+
 }
+    
+
+
+
 
 //Must remember to do validation!!! For example (if there 6 option, then user enter option 7, should prompt error
 

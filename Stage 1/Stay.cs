@@ -27,7 +27,7 @@ namespace Stage_1
         }
         public override string ToString()
         {
-            return ToString();
+            return "CheckInDate: " + CheckinDate + "CheckOutDate: " + CheckoutDate;
         }
 
 
