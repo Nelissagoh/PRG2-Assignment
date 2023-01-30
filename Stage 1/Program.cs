@@ -33,7 +33,7 @@ void DisplayStayName()
     }
 }
 
-
+List<Stay> stayList = new List<Stay>();
 
 
 void DisplayAllRoom()
@@ -110,7 +110,7 @@ while (true)
     if (choice == 4)
     {
         //Display guest name in stay file
-        DisplayStayName();           //Why not just DisplayAllGuest instead?
+        DisplayStayName();           
 
         //prompt user to select a guest and retrieved the selected guest
         Console.Write("Enter guest name to retrieve: ");
@@ -119,6 +119,55 @@ while (true)
         {
 
         }
+
+        // prompt user to enter check in date
+        Console.Write("Enter check in date:");
+        int checkin = Convert.ToInt32(Console.ReadLine());
+
+        // prompt user to enter check out date
+        Console.Write("Enter check out date:");
+        int checkout = Convert.ToInt32(Console.ReadLine());
+
+        // create stay object with the information given
+
+        //List all available rooms
+        DisplayAllRoom();
+
+        // prompt user to select a room and retrieve the selected room
+        Console.Write("Select a room to stay:");
+        string room = Console.ReadLine();  //To list out all the available rooms
+                                          // Standard Room: require wifi [Y/N] & require breakfast [Y/N]
+                                         //  Deluxe Room: additional bed [Y/N]
+
+        // update the user response to the room object
+
+        // update the availability of the room
+
+        //add the room object to the room list of the stay
+
+        // prompt user whether want to select another room, if yes, repeat the above steps from list 
+        Console.Write("Do you want to select another room: ");
+        string option = Console.ReadLine();
+        if (option == "yes")
+        {
+            //Do something
+        }
+        else if (option == "no")
+        {
+            //Do something
+        }
+        else
+        {
+            Console.WriteLine("Invalid Option");
+        }
+
+        // assign the stay object to the guest
+
+
+        // update check in status of the guest
+
+        // display a message to indicate check in successfully
+        Console.WriteLine("Check in successfully");
     }
 
     if (choice == 5)
@@ -128,12 +177,39 @@ while (true)
 
     if (choice == 6)
     {
-        //List the guest
+        // List the guests
         DisplayAllGuest();
 
+        // prompt user to select a guest and retrieve the selected guest
+        Console.Write("Enter guest name to retrieve: ");
+        string opt = Console.ReadLine();
+        if (opt == 1)
+        {
 
+        }
+
+        // check if the guest is checked in
+        if (something)
+        {
+            //do something
+        }
+        else
+        {
+            //do something
+        }
+        // prompt user for the number of day to extend
+        Console.Write("Enter number of days to extend: ");
+        int days = Convert.ToInt32(Console.ReadLine());
+
+        // retrieve the stay object of the guest
+
+        // compute and update the check out date of the stay
+    }
+    else
+    {
+        Console.WriteLine("Invalid Options");
     }
 }
 
-
+//Must remember to do validation!!! For example (if there 6 option, then user enter option 7, should prompt error
 
