@@ -3,6 +3,7 @@
 using Stage_1;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Intrinsics.X86;
 using System.Xml.Linq;
 
 
@@ -118,10 +119,7 @@ Guest? Searchguest(List<Guest> guestList, string? n)
         return null;
     }
 
-foreach(Room r in roomList)
-{
-    Console.WriteLine(r);
-}
+
 
 
 
@@ -285,120 +283,145 @@ while (true)
 
         else if (choice == 5)
         {
-            Console.WriteLine("------------Guest informations-----------");
-            //Display guest name in stay file
-            foreach (var guest in guestList)
+            try
             {
-                Console.WriteLine("Name: {0,-10} PassportNum: {1,-10}", guest.Name, guest.PassportNum);
-            }
-
-            //prompt user to select a guest
-            Console.WriteLine("Enter your choice of name: ");
-            string? name = Console.ReadLine();
-            name = name.ToLower();
-            //Make first letter uppercase
-            name = char.ToUpper(name[0]) + name.Substring(1);
-            Guest? gcheck = Search(guestList, name);
-
-            //exception
-            bool isString = true;
-            foreach (char c in name)
-            {
-                if (char.IsLetter(c))
+                Console.WriteLine("------------Guest informations-----------");
+                //Display guest name in stay file
+                foreach (var guest in guestList)
                 {
-                    isString = false;
-                    break;
+                    Console.WriteLine("Name: {0,-10} PassportNum: {1,-10}", guest.Name, guest.PassportNum);
                 }
-            }
 
-            //ensure only char
-            if (isString)
-            {
-                Console.WriteLine("Enter guest name(Only Character)");
-                Console.WriteLine("Example: Tony");
-                continue;
-            }
-            //show error if guest name not found
+                //prompt user to select a guest
+                Console.WriteLine("Enter your choice of name: ");
+                string? name = Console.ReadLine();
+                name = name.ToLower();
+                //Make first letter uppercase
+                name = char.ToUpper(name[0]) + name.Substring(1);
+                //retrieve the selected guest
+                Guest? gcheck = Search(guestList, name);
 
-
-            else if (gcheck == null)
-            {
-
-                Console.WriteLine("Guest not found. Please try agian. ");
-                continue;
-            }
-
-            //if guest name is found
-
-            else
-            {
-                foreach (Guest g in guestList)
+                //exception
+                bool isString = true;
+                foreach (char c in name)
                 {
-                    if (g.Name == name)
+                    if (char.IsLetter(c))
                     {
-                        Console.WriteLine("----------------------Guest informations----------------------");
-                        Console.WriteLine("Name: {0,-5}\nPassportNumber: {1,-5} ", g.Name, g.PassportNum);
+                        isString = false;
+                        break;
+                    }
+                }
 
-                        if (g.HotelStay == null)
+                //ensure only char
+                if (isString)
+                {
+                    Console.WriteLine("Enter guest name(Only Character)");
+                    Console.WriteLine("Example: Tony");
+                    continue;
+                }
+                //show error if guest name not found
+
+
+                else if (gcheck == null)
+                {
+
+                    Console.WriteLine("Guest not found. Please try agian. ");
+                    continue;
+                }
+
+                //if guest name is found
+
+                else
+                {
+                    //retrieve the stay object of the guest
+                    foreach (Guest g in guestList)
+                    {
+                        if (g.Name == name)
                         {
-                            Console.WriteLine("Guest not found. Please try agian.");
-                            continue;
-                        }
+                            Console.WriteLine("----------------------Guest informations----------------------");
+                            Console.WriteLine("Name: {0,-5}\nPassportNumber: {1,-5} ", g.Name, g.PassportNum);
 
-
-                        else
-                        {
-
-                            Console.WriteLine("-----------------------CheckIn/CheckOut--------------------");
-                            Console.WriteLine("{0,-5}", g.HotelStay);
-                            Console.WriteLine("------------------------Room Details-----------------------");
-
-                            string[] lines = File.ReadAllLines("Stays.csv");
-                            foreach (string line in lines)
+                            if (g.HotelStay == null)
                             {
-                                string[] split = line.Split(',');
+                                Console.WriteLine("Guest not found. Please try agian.");
+                                continue;
+                            }
 
-                                if (split[0] == name)
+                            // display all the details of the stay including check in date, check out date and all rooms details
+                            // that he / she has checked in
+                            else
+                            {
+
+                                Console.WriteLine("-----------------------CheckIn/CheckOut--------------------");
+                                Console.WriteLine("{0,-5}", g.HotelStay);
+                                Console.WriteLine("------------------------Room Details-----------------------");
+
+                                string[] lines = File.ReadAllLines("Stays.csv");
+                                foreach (string line in lines)
                                 {
-                                    if (split[9] == "")
+                                    string[] split = line.Split(',');
+
+                                    if (split[0] == name)
                                     {
-                                        Console.WriteLine("Room number: {0,-10} Require Wifi: {1,-10} \nRequire Breakfast: {2,-10}Extra Bed: {3,-10}", 
-                                            split[5], split[6], split[7], split[8]);
+
+
+
+                                        if (split[0] == name)
+                                        {
+                                            if (split[9] == "")
+                                            {
+                                                Console.WriteLine("Room number: {0,-10}\nRequire Wifi: {1,-10} \nRequire Breakfast: {2,-10}\nExtra Bed: {3,-10}",
+                                                    split[5], split[6], split[7], split[8]);
+
+                                            }
+
+                                            else
+                                            {
+                                                Console.WriteLine("------------------------First Room-----------------------");
+                                                Console.WriteLine("Room number: {0,-10}\n Require Wifi: {1,-10}\n Require Breakfast: {2,-10}\nExtra Bed: {3,-10}",
+                                                    split[5], split[6], split[7], split[8]);
+                                                Console.WriteLine("------------------------Second Room-----------------------");
+                                                Console.WriteLine("Room number: {0,-10}\nRequire Wifi: {1,-10}\nRequireBreakfast: {2,-10}\nExtra Bed: {3,-10}",
+                                                    split[9], split[10], split[11], split[12]);
+
+                                            }
+
+                                        }
+
 
                                     }
-
-                                    else
-                                    {
-                                        Console.WriteLine("------------------------First Room-----------------------");
-                                        Console.WriteLine("Room number: {0,-10} Require Wifi: {1,-10}\n Require Breakfast: {2,-10}Extra Bed: {3,-10}", 
-                                            split[5], split[6], split[7], split[8]);
-                                        Console.WriteLine("------------------------Second Room-----------------------");
-                                        Console.WriteLine("Room number: {0,-10} Require Wifi: {1,-10}\n Require Breakfast: {2,-10}Extra Bed: {3,-10}", 
-                                            split[9], split[10], split[11], split[12]);
-
-                                    }
-
                                 }
+
+
+
                             }
 
 
 
                         }
-
-
-
                     }
+
                 }
 
             }
+
+            catch(FormatException ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Please try agian");
+            }
         }
+
 
         else if (choice == 6)
         {
             Console.WriteLine("");
         }
 
-
+        else if (choice == 7)
+        {
+            //List the guest
+        }
         else if (choice == 0)
         {
             Console.WriteLine("Thank you for staying with us!");
@@ -407,12 +430,9 @@ while (true)
         }
 
 
-        else
-        {
-            Console.WriteLine("Invalid Options");
-        }
     }
 
+    //Exception handling(if user press out of range or letter it will prompt an error)
     catch(FormatException ex)
     {
         Console.WriteLine(ex.Message);
