@@ -20,7 +20,20 @@ namespace Stage_1
             DailyRate = dr;
             IsAvail = ia;
         }
-        public abstract double CalculateCharges();
+        public double CalculateCharges() 
+        {
+            double rate;
+            if (IsAvail == true)
+            {
+                rate = DailyRate;
+            }
+            else
+            {
+                rate = 0.0;
+            }
+            return rate;
+        }
+
         public override string ToString()
         {
             return "BedConfiguration: " + BedConfiguration;

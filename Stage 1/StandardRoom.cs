@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 
 namespace Stage_1
 {
-    class StandardRoom:Room
+    class StandardRoom : Room
     {
-        public bool RequireWifi { get; set; }
-        public bool RequireBreakfast { get; set; }
-        public StandardRoom(){}
-        public StandardRoom(int rn,string bc,double dr,bool ia)
-            :base(rn,bc,dr,ia)
-        {
+        
+            public bool RequireWifi { get; set; }
+            public bool RequireBreakfast { get; set; }
+            public StandardRoom() { }
+            public StandardRoom(int rn, string bc, double dr, bool ia)
+                : base(rn, bc, dr, ia)
+            {
 
-        }
-        public override double CalculateCharges()
-        {
-            return 1;
-        }
-        public override string ToString()
-        {
-            return base.ToString()+"\tRequireWifi: "+RequireWifi 
-                + "\tRequireBreakfast: " + RequireBreakfast;
-        }
+            }
+            public double CalculateCharges()
+            {
+                return 0;
+            }
+            public override string ToString()
+            {
+                return base.ToString() + "\tRequireWifi: " + RequireWifi
+                    + "\tRequireBreakfast: " + RequireBreakfast;
+            }
+        
+
     }
 }

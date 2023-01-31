@@ -9,15 +9,19 @@ namespace Stage_1
     class DeluxeRoom : Room
     {
         public bool AdditionalBed { get; set; }
-        public DeluxeRoom() : base() { }
-        public DeluxeRoom(int rn, string bc, double dr, bool ia, bool ab)
-            : base(rn, bc, dr, ia)
+        public DeluxeRoom(){ }
+        public DeluxeRoom(int rn, string bc, double dr, bool ia)
+            
         {
-            AdditionalBed = ab;
+            RoomNumber = rn;
+            BedConfiguration = bc;
+            DailyRate = dr;
+            IsAvail = ia;
         }
-        public override double CalculateCharges()
+    
+        public double CalculateCharges() 
         {
-            return 1;
+            return 0;
         }
         public override string ToString()
         {
